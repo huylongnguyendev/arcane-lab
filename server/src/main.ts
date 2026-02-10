@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core"
 import { ValidationPipe, VersioningType } from "@nestjs/common"
-import { AppModule } from "./app.module"
+import { AppModule } from "./app.module.js"
 import helmet from "helmet"
 import compression from "compression"
 

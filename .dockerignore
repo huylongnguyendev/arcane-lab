@@ -1,0 +1,12 @@
+# Chặn copy node_modules từ máy thật vào Docker
+node_modules
+**/node_modules
+**/dist
+**/.next
+**/.env
+
+# Chặn các file rác khác
+.git
+.gitignore
+README.md
+docker-compose.yml

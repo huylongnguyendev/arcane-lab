@@ -12,10 +12,15 @@ services:
     # Quan trọng: Giữ lại dữ liệu khi container bị xóa
     volumes:
       - arcane_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d arcane_lab"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: 
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
     container_name: arcane-backend
     restart: always
@@ -31,12 +36,12 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
     container_name: arcane-frontend
     restart: always
     ports:
-      - "4000:4000"
+      - "4000:3000"
     environment:
       # Chú ý: Browser của bạn gọi API nên vẫn để localhost:3000
       NEXT_PUBLIC_API_URL: "http://localhost:3000/v1"
