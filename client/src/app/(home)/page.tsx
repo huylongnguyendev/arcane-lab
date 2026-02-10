@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <>
-      <h1>{count}</h1>
+      <h1 className="text-primary">{count}</h1>
       <button onClick={setCount.inc}>Increase</button>
     </>
   )
