@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: arcane-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: arcane_lab
+    ports:
+      - "5432:5432"
+    # Quan trọng: Giữ lại dữ liệu khi container bị xóa
+    volumes:
+      - arcane_db_data:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: arcane-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # Dùng tên service 'postgres' thay vì localhost
+      DATABASE_URL: "postgresql://postgres:your_password@postgres:5432/arcane_lab?schema=public"
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy # Chỉ chạy backend khi DB đã thực sự sẵn sàng
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: arcane-frontend
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      # Chú ý: Browser của bạn gọi API nên vẫn để localhost:3000
+      NEXT_PUBLIC_API_URL: "http://localhost:3000/v1"
+    depends_on:
+      - backend
+
+# Khai báo volume để lưu trữ dữ liệu DB
+volumes:
+  arcane_db_data:
