@@ -1,0 +1,9 @@
+datasource db {
+  provider = "postgresql" // Hoặc mysql, sqlite tùy DB bạn dùng
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output          = "./generated/prisma"
+  moduleFormat    = "esm"
+}
